@@ -1,0 +1,54 @@
+{
+  "name": "leaderboard-server",
+  "version": "0.9.0",
+  "description": "HTTP server providing leaderboard RESTful API",
+  "main": "dist/app.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --cache . --ext .ts",
+    "lint-fix": "eslint --cache . --ext .ts --fix",
+    "test": "node --no_warnings --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "build": "tsc",
+    "start": "node ./dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/borisprogrm/leaderboard-server.git"
+  },
+  "keywords": [
+    "leaderboard",
+    "http",
+    "express",
+    "openapi",
+    "typescript",
+    "jest"
+  ],
+  "author": {
+    "name": "Boris Panov"
+  },
+  "license": "ISC",
+  "homepage": "https://github.com/borisprogrm/leaderboard-server#readme",
+  "engines": {
+    "node": ">=20.8.10"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.7",
+    "@types/supertest": "^2.0.16",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "eslint": "^8.52.0",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.20",
+    "@types/node": "^20.8.10",
+    "@types/swagger-ui-express": "^4.1.6",
+    "express": "^4.18.2",
+    "express-openapi-validator": "^5.1.0",
+    "http-terminator": "^3.2.0",
+    "log4js": "^6.9.1",
+    "swagger-ui-express": "^5.0.0"
+  }
+}
