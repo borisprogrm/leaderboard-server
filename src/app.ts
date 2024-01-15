@@ -25,19 +25,27 @@ const appContext: IAppContext = {
 const server: Server = new Server(appContext);
 export default server; // for testing purpose
 
+function InitializeServices() {
+	return appContext.appServices.leaderboardService.Initialize();
+}
+
+function ShutdownServices() {
+	return appContext.appServices.leaderboardService.Shutdown().catch(err => {
+		logger.error('Failed to gracefully shutdown server with error', err);
+	});
+}
+
 async function App(): Promise<void> {
 	try {
 		logger.info(`Start (env="${process.env.APP_ENV ?? 'development'}", isDebug=${config.isDebug})`);
 
-		await appContext.appServices.leaderboardService.Initialize();
+		await InitializeServices();
 		await server.SetupControllers();
-		
+
 		logger.info('Initialized');
 
 		await server.Start(config.port, () => {
-			appContext.appServices.leaderboardService.Shutdown().catch(err => {
-				logger.error('Failed to gracefully shutdown server with error', err);
-			});
+			ShutdownServices();
 			setTimeout(() => {
 				logger.warn('Force process exit');
 				process.exit();
@@ -45,7 +53,7 @@ async function App(): Promise<void> {
 		});
 	} catch (err) {
 		logger.fatal('Failed to start server', err);
-		process.exit(1);
+		ShutdownServices().finally(() => process.exit(1));
 	}
 }
 

@@ -28,8 +28,8 @@ export class LeaderboardService {
 		const { default: cacheProviderClass } = await import(`./cache/${CacheProvidersIndex[this.config.cache.providerType]}`);
 		this.cacheProvider = new cacheProviderClass();
 
-		this.dbProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...dbProviderConfig });
-		this.cacheProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...cacheProviderConfig });
+		await this.dbProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...dbProviderConfig });
+		await this.cacheProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...cacheProviderConfig });
 
 		logger.debug('Leaderboard service initialized');
 	}

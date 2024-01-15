@@ -1,14 +1,48 @@
 import * as ConfigTypes from './Config.types.js';
 
-const configDebug: ConfigTypes.IConfig = {
-	apiSpec: {
-		openapi: '3.0.1',
-		info: {
-			title: 'Leaderboard API (debug)',
-			version: '1.0.0',
-		},
-		paths: {},
+const apiSpecHdr = {
+	openapi: '3.0.1',
+	info: {
+		title: 'Leaderboard API',
+		version: '1.0.0',
 	},
+	paths: {},
+};
+
+/**
+ * Local tests config
+ */
+const configTest: ConfigTypes.IConfig = {
+	apiSpec: apiSpecHdr,
+	apiValidation: {
+		validateRequests: true,
+		validateResponses: true,
+	},
+	isDebug: true,
+	port: Number(process.env.APP_PORT ?? 8415),
+	controllers: [
+		'controllers',
+		'controllers/leaderboard'
+	],
+	gracefulTerminationTimeout: 1000,
+	db: {
+		providerType: 'inmemory',
+		config: {},
+	},
+	cache: {
+		providerType: 'simple',
+		config: {
+			ttl: 0,
+		},
+	},
+	apiUI: true,
+};
+
+/**
+ * DEBUG config
+ */
+const configDebug: ConfigTypes.IConfig = {
+	apiSpec: apiSpecHdr,
 	apiValidation: {
 		validateRequests: true,
 		validateResponses: true,
@@ -21,27 +55,26 @@ const configDebug: ConfigTypes.IConfig = {
 	],
 	gracefulTerminationTimeout: 5000,
 	db: {
-		providerType: 'inmemory',
-		config: {},
+		providerType: 'redis',
+		config: {
+			host: process.env.REDIS_HOST ?? '127.0.0.1',
+			port: Number(process.env.APP_PORT ?? 6379),
+		},
 	},
 	cache: {
 		providerType: 'simple',
 		config: {
-			ttl: 60 * 1000,
+			ttl: 1 * 1000,
 		},
 	},
 	apiUI: true,
 };
 
+/**
+ * PRODUCTION config
+ */
 const configProduction: ConfigTypes.IConfig = {
-	apiSpec: {
-		openapi: '3.0.1',
-		info: {
-			title: 'Leaderboard API (production)',
-			version: '1.0.0',
-		},
-		paths: {},
-	},
+	apiSpec: apiSpecHdr,
 	apiValidation: {
 		validateRequests: true,
 		validateResponses: false,
@@ -54,17 +87,24 @@ const configProduction: ConfigTypes.IConfig = {
 	],
 	gracefulTerminationTimeout: 5000,
 	db: {
-		providerType: 'inmemory', // temporally
-		config: {},
+		providerType: 'redis',
+		config: {
+			host: process.env.REDIS_HOST ?? '127.0.0.1',
+			port: Number(process.env.APP_PORT ?? 6379),
+		},
 	},
 	cache: {
 		providerType: 'simple',
 		config: {
-			ttl: 60 * 1000,
+			ttl: 10 * 1000,
 		},
 	},
 	apiUI: false,
 };
 
-export const config = (process.env.APP_ENV === 'production') ? configProduction : configDebug;
 export type IConfig = ConfigTypes.IConfig;
+export const config = ({
+	'test': configTest,
+	'development': configDebug,
+	'production': configProduction,
+})[process.env.APP_ENV ?? ''] ?? configDebug;
