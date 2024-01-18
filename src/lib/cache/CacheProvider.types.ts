@@ -1,12 +1,15 @@
-import {TopData} from '../db/DbProvider.types.js';
-export {TopData}
+import {IDbProvider, TopData} from '../db/DbProvider.types.js';
+export {IDbProvider, TopData}
 
-export type CacheData = [exp: number, data: TopData];
+export type CacheData = {
+	exp: number,
+	cnt: number,
+	promise: Promise<TopData>,
+};
 
 export type CacheProviderConfig = {isDebug?: boolean, ttl: number} & {[key: string]: unknown};
 export interface ICacheProvider {
-	Initialize(config: CacheProviderConfig): Promise<void>;
-	Get(gameId: string, nTop: number): Promise<TopData | null>;
-	Set(gameId: string, topData: TopData): Promise<void>;
+	Initialize(config: CacheProviderConfig, dbProvider: IDbProvider): Promise<void>;
+	Top(gameId: string, nTop: number): Promise<TopData>;
 	Shutdown(): Promise<void>;
 }

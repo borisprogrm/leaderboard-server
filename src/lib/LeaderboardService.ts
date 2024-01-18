@@ -29,7 +29,7 @@ export class LeaderboardService {
 		this.cacheProvider = new cacheProviderClass();
 
 		await this.dbProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...dbProviderConfig });
-		await this.cacheProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...cacheProviderConfig });
+		await this.cacheProvider?.Initialize({ ...{ isDebug: this.config.isDebug }, ...cacheProviderConfig }, this.dbProvider as IDbProvider);
 
 		logger.debug('Leaderboard service initialized');
 	}
@@ -47,18 +47,7 @@ export class LeaderboardService {
 	}
 
 	async GetTop(gameId: string, nTop: number): Promise<TopData> {
-		let topData = await this.cacheProvider?.Get(gameId, nTop);
-		if (topData) {
-			return topData;
-		}
-
-		topData = await this.dbProvider?.Top(gameId, nTop);
-		if (!topData) {
-			return [];
-		}
-		
-		await this.cacheProvider?.Set(gameId, topData);
-		return topData;
+		return this.cacheProvider?.Top(gameId, nTop) ?? [];
 	}
 
 	async Shutdown(): Promise<unknown> {
