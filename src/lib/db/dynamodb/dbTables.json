@@ -1,0 +1,56 @@
+[
+	{
+		"TableName": "Leaderboard",
+		"AttributeDefinitions": [
+			{
+				"AttributeName": "gId",
+				"AttributeType": "S"
+			},
+			{
+				"AttributeName": "uId",
+				"AttributeType": "S"
+			},
+			{
+				"AttributeName": "sc",
+				"AttributeType": "N"
+			}
+		],
+		"KeySchema": [
+			{
+				"AttributeName": "gId",
+				"KeyType": "HASH"
+			},
+			{
+				"AttributeName": "uId",
+				"KeyType": "RANGE"
+			}
+		],
+		"GlobalSecondaryIndexes": [
+			{
+				"IndexName": "ScoreIndex",
+				"KeySchema": [
+					{
+						"AttributeName": "gId",
+						"KeyType": "HASH"
+					},
+					{
+						"AttributeName": "sc",
+						"KeyType": "RANGE"
+					}
+				],
+				"Projection": {
+					"ProjectionType": "INCLUDE",
+					"NonKeyAttributes": ["nm", "pl"]
+				},
+				"ProvisionedThroughput": {
+					"ReadCapacityUnits": 1,
+					"WriteCapacityUnits": 1
+				}
+			}
+		],
+		"ProvisionedThroughput": {
+			"ReadCapacityUnits": 1,
+			"WriteCapacityUnits": 1
+		}
+	}
+]

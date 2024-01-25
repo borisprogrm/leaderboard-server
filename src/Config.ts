@@ -60,6 +60,21 @@ const configDebug: ConfigTypes.IConfig = {
 			host: process.env.REDIS_HOST ?? '127.0.0.1',
 			port: Number(process.env.APP_PORT ?? 6379),
 		},
+		/* OR
+		providerType: 'dynamodb',
+		config: {
+			client: {
+				endpoint: 'http://localhost:8000',
+				apiVersion: '2012-08-10',
+				credentials: {
+					accessKeyId: 'none',
+					secretAccessKey: 'none',
+				},
+				region: 'local',
+			},
+			nShards: 4,
+		},
+		*/
 	},
 	cache: {
 		providerType: 'simple',
@@ -87,10 +102,11 @@ const configProduction: ConfigTypes.IConfig = {
 	],
 	gracefulTerminationTimeout: 5000,
 	db: {
+		// TODO: add actual db config here...
 		providerType: 'redis',
 		config: {
-			host: process.env.REDIS_HOST ?? '127.0.0.1',
-			port: Number(process.env.APP_PORT ?? 6379),
+			host: process.env.REDIS_HOST,
+			port: Number(process.env.APP_PORT),
 		},
 	},
 	cache: {

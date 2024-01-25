@@ -8,4 +8,9 @@ export const DbProvidersIndex = {
 	 * Redis db provider
 	 */
 	redis: 'redis/RedisProvider.js',
+
+	/**
+	 * DynamoDB provider
+	 */
+	dynamodb: 'dynamodb/DynamoProvider.js',
 };
