@@ -13,4 +13,9 @@ export const DbProvidersIndex = {
 	 * DynamoDB provider
 	 */
 	dynamodb: 'dynamodb/DynamoProvider.js',
+
+	/**
+	 * MongoDB provider
+	 */
+	mongodb: 'mongodb/MongoProvider.js',
 };

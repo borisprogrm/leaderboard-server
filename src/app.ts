@@ -49,7 +49,7 @@ async function App(): Promise<void> {
 			setTimeout(() => {
 				logger.warn('Force process exit');
 				process.exit();
-			}, 3000).unref();
+			}, config.gracefulTerminationTimeout ?? 5000).unref();
 		});
 	} catch (err) {
 		logger.fatal('Failed to start server', err);

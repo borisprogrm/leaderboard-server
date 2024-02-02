@@ -24,7 +24,7 @@ const configTest: ConfigTypes.IConfig = {
 		'controllers',
 		'controllers/leaderboard'
 	],
-	gracefulTerminationTimeout: 1000,
+	gracefulTerminationTimeout: 10000,
 	db: {
 		providerType: 'inmemory',
 		config: {},
@@ -60,6 +60,7 @@ const configDebug: ConfigTypes.IConfig = {
 			host: process.env.REDIS_HOST ?? '127.0.0.1',
 			port: Number(process.env.APP_PORT ?? 6379),
 		},
+
 		/* OR
 		providerType: 'dynamodb',
 		config: {
@@ -73,6 +74,16 @@ const configDebug: ConfigTypes.IConfig = {
 				region: 'local',
 			},
 			nShards: 4,
+		},
+		*/
+
+		/* OR
+		providerType: 'mongodb',
+		config: {
+			url: 'mongodb://localhost:27017',
+			options: {
+				serverSelectionTimeoutMS: 5000,
+			},
 		},
 		*/
 	},
