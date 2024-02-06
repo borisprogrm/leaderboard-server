@@ -18,4 +18,9 @@ export const DbProvidersIndex = {
 	 * MongoDB provider
 	 */
 	mongodb: 'mongodb/MongoProvider.js',
+
+	/**
+	 * PostgreSQL provider
+	 */
+	postgresql: 'postgresql/PostgreProvider.js',
 };
