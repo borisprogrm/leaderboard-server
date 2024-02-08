@@ -40,12 +40,12 @@ export class ControllersManager {
 	}
 
 	async SetupControllersFromDir(dir: string, router: Router): Promise<void> {
-		const files = fs.readdirSync('./src/' + dir);
+		const files = fs.readdirSync('./dist/' + dir);
 
 		logger.debug(`Setup controllers from ./${dir}/`);
 
 		for (const file of files) {
-			if (!/controller.ts$/.test(file)) {
+			if (!/controller.js$/.test(file)) {
 				continue;
 			}
 			try {

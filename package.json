@@ -29,7 +29,7 @@
   "license": "ISC",
   "homepage": "https://github.com/borisprogrm/leaderboard-server#readme",
   "engines": {
-    "node": ">=20.8.10"
+    "node": ">=20.11.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.7",
