@@ -1,38 +1,14 @@
-import { jest } from '@jest/globals';
-
-import * as mongodb from 'mongodb';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import fs from 'fs';
+import { GenericContainer, StartedTestContainer } from 'testcontainers';
 
 import MongoProvider from '../src/lib/db/mongodb/MongoProvider';
 import { TopData, UserProperties } from '../src/lib/db/DbProvider.types';
 
 describe('MongoProvider', () => {
-	let dbMock: MongoMemoryServer;
+	let mongoContainer: StartedTestContainer;
 	let dbProvider: MongoProvider;
 
-	// A little trick to map MongoDB Shell commands => Node.js Driver commands for db setup script
-	class MShellDbMock {
-		constructor(private db: mongodb.Db) {
-			this.db = db;
-		}
-		
-		public createCollection<TSchema extends Document = Document>(name: string, options?: mongodb.CreateCollectionOptions): Promise<mongodb.Collection<TSchema>> {
-			return this.db.createCollection(name, options);
-		}
-	
-		public getCollection<TSchema extends Document = Document>(name: string, options?: mongodb.CollectionOptions): mongodb.Collection<TSchema> {
-			return this.db.collection(name, options);
-		}
-	}
-
-	class MShellMock {	
-		public getDB(name: string): MShellDbMock {
-			return new MShellDbMock(dbProvider['mongo']!.db(name));
-		}
-	}
-	// ----------------------------------------------------------------------
-
-	const gameId = 'game101';
+	const gameId = 'game1';
 	const userId1 = 'user1';
 	const userId2 = 'user2';
 
@@ -48,23 +24,25 @@ describe('MongoProvider', () => {
 	const topData: TopData = [{ ...userProp2, userId: userId2 }, { ...userProp1, userId: userId1 }];
 
 	beforeAll(async () => {
-		dbMock = await MongoMemoryServer.create();
+		mongoContainer = await new GenericContainer('mongo:7.0.4')
+			.withExposedPorts(27017)
+			.withCopyContentToContainer([{
+				content: fs.readFileSync('./src/lib/db/mongodb/setup.mongodb.cjs'),
+				target: '/docker-entrypoint-initdb.d/mongo-init.js',
+			}])
+			.start();
+
 		dbProvider = new MongoProvider();
 
 		await dbProvider.Initialize({
 			isDebug: true,
-			url: dbMock.getUri(),
+			url: `mongodb://localhost:${mongoContainer.getMappedPort(27017)}`,
 		});
-
-		(global as {[key: string]: unknown}).Mongo = MShellMock; // Have to use global
-		const { default: SetupDB } = await import('../src/lib/db/mongodb/setup.mongodb.cjs');
-		await SetupDB();
-	}, 10000)
+	}, 60000)
 
 	afterAll(async () => {
 		await dbProvider.Shutdown();
-		await dbMock.stop();
-		jest.restoreAllMocks();
+		await mongoContainer.stop();
 	}, 10000);
 
 	test('get empty data', async () => {
@@ -79,7 +57,7 @@ describe('MongoProvider', () => {
 		data = await dbProvider.Get(gameId, userId1);
 		expect(data).toEqual(userProp1);
 
-		const userProp1Mod = {...userProp1, score: 33};
+		const userProp1Mod = { ...userProp1, score: 33 };
 		await dbProvider.Put(gameId, userId1, userProp1Mod);
 		data = await dbProvider.Get(gameId, userId1);
 		expect(data).toEqual(userProp1Mod);
