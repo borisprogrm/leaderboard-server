@@ -55,11 +55,16 @@ const configDebug: ConfigTypes.IConfig = {
 	],
 	gracefulTerminationTimeout: 5000,
 	db: {
+		providerType: 'inmemory',
+		config: {},
+
+		/* OR
 		providerType: 'redis',
 		config: {
 			host: process.env.REDIS_HOST ?? '127.0.0.1',
 			port: Number(process.env.APP_PORT ?? 6379),
 		},
+		*/
 
 		/* OR
 		providerType: 'dynamodb',

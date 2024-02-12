@@ -11,7 +11,7 @@ log4js.configure({
 		out: { type: 'stdout', layout: { type: 'colored' } },
 	},
 	categories: {
-		default: { appenders: ['out'], level: config.isDebug ? 'ALL' : 'INFO' },
+		default: { appenders: ['out'], level: process.env.APP_ENV === 'test' ? 'OFF' : (config.isDebug ? 'ALL' : 'INFO') },
 	},
 });
 

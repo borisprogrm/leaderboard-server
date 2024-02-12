@@ -1,57 +1,12 @@
-import { jest } from '@jest/globals';
-
 import fs from 'fs';
-import pg from 'pg';
-import { IMemoryDb, newDb } from 'pg-mem';
+import { GenericContainer, StartedTestContainer } from 'testcontainers';
 
 import PostgreProvider from '../src/lib/db/postgresql/PostgreProvider';
 import { TopData, UserProperties } from '../src/lib/db/DbProvider.types';
 
 describe('PostgreProvider', () => {
-	let dbMock: IMemoryDb;
+	let pgContainer: StartedTestContainer;
 	let dbProvider: PostgreProvider;
-
-	class PgPoolMock {
-		constructor(private readonly db: IMemoryDb) {
-			this.db = db;
-		}
-
-		private PrepareSQLText(text: string, values?: string[]) {
-			if (!Array.isArray(values)) {
-				return text;
-			}
-
-			let sqlStr: string = text;
-			const N = values.length;
-			for (let i = N; i > 0; i--) {
-				const value = values[i - 1];
-				const valueType = typeof value;
-				
-				let valueStr: string;
-				if (valueType === 'string') {
-					valueStr = pg.escapeLiteral(value);
-				}
-				else if (valueType === 'number') {
-					valueStr = !Number.isNaN(value) ? String(value) : 'null';
-				}
-				else if (value == null) {
-					valueStr = 'null';
-				}
-				else {
-					throw new Error('Unknown value type');
-				}
-		
-				sqlStr = sqlStr.replace(new RegExp(`\\$${i}`, 'g'), valueStr);
-			}
-			return sqlStr;
-		}
-	
-		query(text: string, values?: string[]) {
-			return this.db.public.query(this.PrepareSQLText(text, values));
-		}
-
-		async end() {}
-	}
 
 	const gameId = 'game1';
 	const userId1 = 'user1';
@@ -69,20 +24,37 @@ describe('PostgreProvider', () => {
 	const topData: TopData = [{ ...userProp2, userId: userId2 }, { ...userProp1, userId: userId1 }];
 
 	beforeAll(async () => {
-		dbMock = newDb();
-		dbProvider = new PostgreProvider();
-		
-		// Emulate pg pool via pg-mem
-		dbProvider['pool'] = new PgPoolMock(dbMock) as unknown as pg.Pool;
+		const POSTGRES_USER = 'admin';
+		const POSTGRES_PASSWORD = 'admpass';
+		const POSTGRES_DB = 'Leaderboard';
 
+		pgContainer = await new GenericContainer('postgres:16.1')
+		.withExposedPorts(5432)
+		.withEnvironment({
+			POSTGRES_USER: POSTGRES_USER,
+			POSTGRES_PASSWORD: POSTGRES_PASSWORD,
+			POSTGRES_DB: POSTGRES_DB
+		})
+		.start();
+
+		dbProvider = new PostgreProvider();
+		await dbProvider.Initialize({
+			isDebug: true,
+			host: '127.0.0.1',
+			port: pgContainer.getMappedPort(5432),
+			database: POSTGRES_DB,
+			user: POSTGRES_USER,
+			password: POSTGRES_PASSWORD,
+		});
+		
 		// Create db tables and indexes
-		dbMock.public.none(fs.readFileSync('./src/lib/db/postgresql/dbSetup.sql', 'utf8'));
-	})
+		await dbProvider['pool']!.query(fs.readFileSync('./src/lib/db/postgresql/dbSetup.sql', 'utf-8'));
+	}, 60000);
 
 	afterAll(async () => {
 		await dbProvider.Shutdown();
-		jest.restoreAllMocks();
-	});
+		await pgContainer.stop();
+	}, 10000);
 
 	test('get empty data', async () => {
 		const data = await dbProvider.Get(gameId, userId1);
