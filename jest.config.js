@@ -14,7 +14,6 @@ export default {
 	coverageProvider: 'v8',
 	testEnvironment: 'node',
 	testMatch: ['<rootDir>/tests/*.test.ts'],
-	preset: 'ts-jest',
 	transform: {
 		'^.+\\.(js|jsx|ts|tsx)$': ['ts-jest', {
 			useESM: true,

@@ -13,6 +13,7 @@ log4js.configure({
 	categories: {
 		default: { appenders: ['out'], level: process.env.APP_ENV === 'test' ? 'OFF' : (config.isDebug ? 'ALL' : 'INFO') },
 	},
+	disableClustering: true,
 });
 
 const appContext: IAppContext = {
@@ -29,10 +30,20 @@ function InitializeServices() {
 	return appContext.appServices.leaderboardService.Initialize();
 }
 
-function ShutdownServices() {
-	return appContext.appServices.leaderboardService.Shutdown().catch(err => {
+async function ShutdownServices() {
+	try {
+		await appContext.appServices.leaderboardService.Shutdown();
+	}
+	catch (err) {
 		logger.error('Failed to gracefully shutdown server with error', err);
-	});
+	}
+	await new Promise((resolve) => log4js.shutdown(() => resolve(true)));
+}
+
+function ProcessExit(exitCode?: number) {
+	if (process.env.APP_ENV !== 'test') {
+		process.exit(exitCode);
+	}
 }
 
 async function App(): Promise<void> {
@@ -45,15 +56,11 @@ async function App(): Promise<void> {
 		logger.info('Initialized');
 
 		await server.Start(config.port, () => {
-			ShutdownServices();
-			setTimeout(() => {
-				logger.warn('Force process exit');
-				process.exit();
-			}, config.gracefulTerminationTimeout ?? 5000).unref();
+			ShutdownServices().finally(() => ProcessExit());
 		});
 	} catch (err) {
 		logger.fatal('Failed to start server', err);
-		ShutdownServices().finally(() => process.exit(1));
+		ShutdownServices().finally(() => ProcessExit(1));
 	}
 }
 

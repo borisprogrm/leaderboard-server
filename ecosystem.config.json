@@ -1,0 +1,13 @@
+{
+	"apps": [
+		{
+			"name": "leaderboard-server",
+			"script": "./dist/app.js",
+			"exec_mode": "cluster",
+			"instances": 0,
+			"min_uptime": 5000,
+			"max_restarts": 5,
+			"kill_timeout": 8000
+		}
+	]
+}
