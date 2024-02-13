@@ -23,4 +23,9 @@ export const DbProvidersIndex = {
 	 * PostgreSQL provider
 	 */
 	postgresql: 'postgresql/PostgreProvider.js',
+
+	/**
+	 * MySQL provider
+	 */
+	mysql: 'mysql/MySqlProvider.js',
 };
