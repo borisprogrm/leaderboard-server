@@ -1,4 +1,4 @@
-FROM node:20.11.1-bullseye-slim
+FROM node:20.12.1-bullseye-slim
 
 WORKDIR /usr/src/app
 RUN chown node:node ./
