@@ -1,8 +1,8 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 const logger = log4js.getLogger('MongoProvider');
 
 import { MongoClient, Db, Collection, Document, MongoClientOptions, ObjectId } from 'mongodb';
-import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types.js';
+import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types';
 
 type UserCollectionCustomId = {
 	gId: string,

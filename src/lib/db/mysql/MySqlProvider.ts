@@ -1,8 +1,8 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 const logger = log4js.getLogger('MySqlProvider');
 
 import mysql from 'mysql2/promise';
-import { IDbProvider, DBProviderConfig, TopData, UserData, UserProperties } from '../DbProvider.types.js';
+import { IDbProvider, DBProviderConfig, TopData, UserData, UserProperties } from '../DbProvider.types';
 
 export default class MySqlProvider implements IDbProvider {
 	private pool: mysql.Pool | null;

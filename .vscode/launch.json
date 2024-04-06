@@ -7,28 +7,54 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
-			"skipFiles": [
-				"<node_internals>/**"
+			"name": "Nest: debug app",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": [
+				"run",
+				"start:debug",
+				"--",
+				"--inspect-brk"
 			],
-			"program": "${workspaceFolder}/dist/app.js",
-			"preLaunchTask": "tsc: build - tsconfig.json",
-			"outFiles": [
-				"${workspaceFolder}/dist/**/*.js"
-			],
-			"outputCapture": "std", // or "console" 
+			"autoAttachChildProcesses": true,
+			"restart": true,
+			"sourceMaps": true,
+			"stopOnEntry": false,
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "openOnSessionStart",
+			"cwd": "${workspaceRoot}",
 		},
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Jest: current file",
-			//"env": { "NODE_ENV": "test" },
+			"name": "Jest: debug all tests",
 			"program": "${workspaceFolder}/node_modules/.bin/jest",
-			"args": ["${fileBasenameNoExtension}", "--config", "jest.config.js"],
+			"args": [
+				"--config",
+				"jest.config.js",
+				"--runInBand",
+				"--coverage=false"
+			],
 			"console": "integratedTerminal",
 			"windows": {
-			  "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
 			}
-		  }
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Jest: debug current file",
+			"program": "${workspaceFolder}/node_modules/.bin/jest",
+			"args": [
+				"--config",
+				"jest.config.js",
+				"--runTestsByPath",
+				"${relativeFileDirname}/${fileBasename}",
+				"--coverage=false"
+			],
+			"console": "integratedTerminal",
+			"windows": {
+				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
+			}
+		}
 	]
 }

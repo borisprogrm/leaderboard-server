@@ -1,13 +1,24 @@
 import { jest } from '@jest/globals';
-import server from '../src/app';
 import request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
+import { AppModule } from '../src/app.module';
+import { AppService } from '../src/app.service';
 import { UserData } from '../src/lib/db/DbProvider.types';
 
-const app = server.GetAppInstance();
+import log4js from 'log4js';
+const logger = log4js.getLogger('App');
+
+import { Log4jsLogger } from '../src/lib/logger.service';
+
+Log4jsLogger.ConfigureLog4jsLogger();
+
+let app: NestExpressApplication;
+let appService: AppService;
 
 async function ApiCall(route: string, params: object, statusCode: number = 200): Promise<request.Response> {
-	return request(app)
+	return request(app.getHttpServer())
 		.post(route)
 		.send(params)
 		.set('Accept', 'application/json')
@@ -39,6 +50,25 @@ describe('Server API', () => {
 		params: 'some_payload_3',
 	};
 
+	beforeAll(async () => {
+		const moduleRef = await Test.createTestingModule({
+			imports: [AppModule],
+		}).compile();
+
+		app = moduleRef.createNestApplication<NestExpressApplication>({
+			logger: new Log4jsLogger(logger),
+		});
+
+		appService = app.get<AppService>(AppService);
+		appService.InitializeApp(app);
+
+		await app.init();
+	});
+
+	afterAll(async () => {
+		await app.close();
+	});
+
 	beforeEach(() => {
 		jest.useFakeTimers({ now: now });
 	});
@@ -48,12 +78,8 @@ describe('Server API', () => {
 		jest.useRealTimers();
 	});
 
-	afterAll(() => {
-		server.Shutdown();
-	});
-
 	test('status => success', async () => {
-		const response = await request(app)
+		const response = await request(app.getHttpServer())
 			.get('/status')
 			.expect(200)
 			.expect('Content-Type', /json/);
@@ -105,7 +131,7 @@ describe('Server API', () => {
 		response = await ApiCall('/leaderboard/SendScore', { gameId: gameId, ...user3 });
 		expect(response.body).toStrictEqual({ result: 'success' });
 
-		jest.useFakeTimers({ now: now + server.GetAppContext().appConfig.cache.config.ttl });
+		jest.useFakeTimers({ now: now + appService.config.cache.config.ttl });
 
 		for (let i = 0; i < 2; ++i) {
 			response = await ApiCall('/leaderboard/GetTop', { gameId: gameId, nTop: 10 });
@@ -124,7 +150,7 @@ describe('Server API', () => {
 	});
 
 	test('unexpected exception thrown => error', async () => {
-		const module = await import('../src/lib/LeaderboardService');
+		const module = await import('../src/lib/leaderboard.service');
 		jest
 			.spyOn(module.LeaderboardService.prototype, 'PutUserScore')
 			.mockImplementation(() => {

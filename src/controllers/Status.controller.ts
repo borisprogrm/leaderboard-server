@@ -1,40 +1,34 @@
+import { Controller, Get, Req, Res } from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { IController, ControllerMethod, OperationObject, IAppContext } from '../lib/ControllersManager.types.js';
 
-export class ControllerImpl implements IController {
-	constructor(
-		readonly context: IAppContext,
-		readonly route: string = '/Status',
-		readonly method: ControllerMethod = 'get',
-		readonly schema: OperationObject = {
-			description: 'Returns server status (success code)',
-			tags: ['status'],
-			requestBody: {
-				required: false,
-				content: {
-					'application/json': {},
-				},
-			},
-			responses: {
-				'200': {
-					description: 'Successful response',
-					content: {
-						'application/json': {
-							schema: {
-								type: 'object',
-								properties: {
-									result: { type: 'string', example: 'success' },
-								},
-								required: ['result'],
-							},
-						},
+@Controller()
+export default class StatusController {
+	constructor() { }
+
+	@Get('Status')
+	@ApiOperation({
+		description: 'Returns server status (success code)',
+		tags: ['status'],
+	})
+
+	@ApiResponse({
+		status: 200,
+		description: 'Successful response',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						result: { type: 'string', example: 'success' },
 					},
+					required: ['result'],
 				},
 			},
-		}
-	) { }
+		},
+	})
 
-	async ControllerHandler(request: Request, response: Response): Promise<void> {
+	async handler(@Req() _request: Request, @Res() response: Response) {
 		response.send({ result: 'success' });
 	}
 }

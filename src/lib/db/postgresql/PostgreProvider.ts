@@ -1,9 +1,9 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 const logger = log4js.getLogger('PostgreProvider');
 
 import pg from 'pg';
 const { Pool } = pg;
-import { IDbProvider, DBProviderConfig, TopData, UserData, UserProperties } from '../DbProvider.types.js';
+import { IDbProvider, DBProviderConfig, TopData, UserData, UserProperties } from '../DbProvider.types';
 
 export default class PostgreProvider implements IDbProvider {
 	private pool: pg.Pool | null;

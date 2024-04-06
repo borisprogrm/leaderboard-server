@@ -1,26 +1,26 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
 process.env.APP_ENV = 'test';
-export default {
-	clearMocks: true,
-	collectCoverage: true,
-	collectCoverageFrom: [
-		'./src/**/*.ts',
-	],
-	coveragePathIgnorePatterns: [
-		'.types.ts',
-		'index.ts',
-	],
-	coverageDirectory: '<rootDir>/tests/coverage',
-	coverageProvider: 'v8',
-	testEnvironment: 'node',
+
+/** @type {import('jest').Config} */
+const config = {
+	moduleFileExtensions: ["js", "json", "ts"],
+	rootDir: ".",
+	testEnvironment: "node",
 	testMatch: ['<rootDir>/tests/*.test.ts'],
 	transform: {
-		'^.+\\.(js|jsx|ts|tsx)$': ['ts-jest', {
-			useESM: true,
-		}],
+		"^.+\\.(t|j)s$": "ts-jest"
 	},
-	moduleNameMapper: {
-		'^(\\.\\.?\\/.+)\\.js?$': '$1',
-	},
-	extensionsToTreatAsEsm: ['.ts'],
-};
+	clearMocks: true,
+    collectCoverage: true,
+    collectCoverageFrom: [
+        './src/**/*.ts',
+
+    ],
+    coveragePathIgnorePatterns: [
+		'app.ts',
+        '.types.ts',
+    ],
+    coverageDirectory: '<rootDir>/tests/coverage',
+    coverageProvider: 'v8',
+}
+
+module.exports = config;

@@ -1,16 +1,21 @@
 {
 	"compilerOptions": {
-		"baseUrl": ".",
-		"outDir": "dist",
-		"target": "es2022",
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
-		"esModuleInterop": true,
-		"sourceMap": true,
-		"allowJs": true,
-		"strict": true,
+		"module": "commonjs",
+		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
 		"allowSyntheticDefaultImports": true,
+		"target": "es2022",
+		"sourceMap": true,
+		"baseUrl": "./",
+		"outDir": "./dist",
+		"incremental": true,
+		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		"strict": true
 	},
-	"include": ["src/**/*"]
+	"include": [
+		"src/**/*"
+	]
 }

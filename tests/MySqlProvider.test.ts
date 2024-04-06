@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer, Wait, StartedTestContainer } from 'testcontainers';
 
 import MySqlProvider from '../src/lib/db/mysql/MySqlProvider';
 import { TopData, UserProperties } from '../src/lib/db/DbProvider.types';
@@ -41,6 +41,7 @@ describe('MySqlProvider', () => {
 			content: fs.readFileSync('./src/lib/db/mysql/dbSetup.sql'),
 			target: '/docker-entrypoint-initdb.d/init.sql',
 		}])
+		.withWaitStrategy(Wait.forListeningPorts())
 		.start();
 
 		dbProvider = new MySqlProvider();
@@ -52,7 +53,7 @@ describe('MySqlProvider', () => {
 			user: MYSQL_USER,
 			password: MYSQL_PASSWORD,
 		});
-	}, 60000);
+	}, 100000);
 
 	afterAll(async () => {
 		await dbProvider.Shutdown();

@@ -1,11 +1,11 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 const logger = log4js.getLogger('DynamoProvider');
 
 import * as crypto from 'crypto';
 
 import { DynamoDBClient, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, DeleteCommand, GetCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types.js';
+import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types';
 
 type UserDbProperties = {
 	gId: string,

@@ -1,7 +1,7 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 const logger = log4js.getLogger('DbInMemoryProvider');
 
-import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types.js';
+import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types';
 
 export default class DbInMemoryProvider implements IDbProvider {
 	private readonly data: Map<string, Map<string, UserProperties>>;

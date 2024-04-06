@@ -1,7 +1,7 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 const logger = log4js.getLogger('CacheSimpleProvider');
 
-import { ICacheProvider, IDbProvider, CacheProviderConfig, CacheData, TopData } from '../CacheProvider.types.js';
+import { ICacheProvider, IDbProvider, CacheProviderConfig, CacheData, TopData } from '../CacheProvider.types';
 
 export default class CacheSimpleProvider implements ICacheProvider {
 	private readonly cache: Map<string, CacheData>;

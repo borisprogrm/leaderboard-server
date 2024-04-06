@@ -23,7 +23,7 @@ describe('DynamoProvider', () => {
 	const topData: TopData = [{ ...userProp2, userId: userId2 }, { ...userProp1, userId: userId1 }];
 
 	beforeAll(async () => {
-		dynalite['default'].setup('.');
+		dynalite.setup('.');
 		await dynalite.startDb();
 		await dynalite.createTables();
 

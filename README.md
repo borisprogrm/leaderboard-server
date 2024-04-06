@@ -69,4 +69,4 @@ Any available DB provider can be used depending on your needs.
 
 
 ## Keywords
-leaderboard, node.js, typescript, express, openapi, swagger, jest, docker, redis, dynamodb, mongodb, postgresql, mysql
+leaderboard, node.js, typescript, nestjs, express, openapi, swagger, jest, docker, redis, dynamodb, mongodb, postgresql, mysql

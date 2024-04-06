@@ -24,7 +24,7 @@ describe('RedisProvider', () => {
 
 	beforeAll(async () => {
 		jest.spyOn(RedisProvider.prototype, 'Initialize').mockImplementation(async function (this: RedisProvider, config: object) {
-			this['redis'] = new RedisMock['default'](config as RedisOptions);
+			this['redis'] = new RedisMock(config as RedisOptions);
 		});
 		jest.spyOn(RedisProvider.prototype, 'Shutdown').mockImplementation(async function (this: RedisProvider) {});
 
