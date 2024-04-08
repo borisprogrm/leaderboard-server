@@ -4,11 +4,11 @@ const logger = log4js.getLogger('ControllersManager');
 import { Router, Request, Response, IRouterMatcher } from 'express';
 import fs from 'fs';
 import path from 'path';
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types.js';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 
-import { IController, ControllerHandlerFunc, IAppContext } from './ControllersManager.types.js';
+import { IController, ControllerHandlerFunc, IAppContext } from './ControllersManager.types';
 
-import { ApiSpecManager } from './ApiSpecManager.js';
+import { ApiSpecManager } from './ApiSpecManager';
 
 export class ControllersManager {
 	private readonly context: IAppContext;
@@ -40,16 +40,16 @@ export class ControllersManager {
 	}
 
 	async SetupControllersFromDir(dir: string, router: Router): Promise<void> {
-		const files = fs.readdirSync('./dist/' + dir);
+		const files = fs.readdirSync(path.resolve(__dirname, '..', dir));
 
 		logger.debug(`Setup controllers from ./${dir}/`);
 
 		for (const file of files) {
-			if (!/controller.js$/.test(file)) {
+			if (!/controller.(t|j)s$/.test(file)) {
 				continue;
 			}
 			try {
-				const module = await import(`../${dir}/${path.parse(file).name}.js`);
+				const module = await import(`${__dirname}/../${dir}/${path.parse(file).name}`);
 				const controller = new module.ControllerImpl(this.context);
 				this.SetupController(controller, router);
 				logger.debug(`controller ${controller.route} from module ${file}`);

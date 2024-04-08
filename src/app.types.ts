@@ -1,5 +1,5 @@
-import { IConfig } from './Config.types.js';
-import { LeaderboardService } from './lib/LeaderboardService.js';
+import { IConfig } from './Config.types';
+import { LeaderboardService } from './lib/LeaderboardService';
 
 interface IAppServices {
 	readonly leaderboardService: LeaderboardService;

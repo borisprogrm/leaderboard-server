@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types.js';
-import { IConfig } from '../app.types.js';
-import { IController } from './ControllersManager.types.js';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+import { IConfig } from '../app.types';
+import { IController } from './ControllersManager.types';
 
 export class ApiSpecManager {
 	private config: IConfig;

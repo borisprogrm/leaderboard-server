@@ -1,9 +1,9 @@
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types.js';
-import { CacheProvidersIndex } from './lib/cache/index.js';
-import { DbProvidersIndex } from './lib/db/index.js';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+import { CacheProvidersIndex } from './lib/cache/index';
+import { DbProvidersIndex } from './lib/db/index';
 
-import { CacheProviderConfig } from './lib/cache/CacheProvider.types.js';
-import { DBProviderConfig } from './lib/db/DbProvider.types.js';
+import { CacheProviderConfig } from './lib/cache/CacheProvider.types';
+import { DBProviderConfig } from './lib/db/DbProvider.types';
 
 export interface IConfig {
 	/**

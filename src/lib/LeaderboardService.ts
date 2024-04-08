@@ -1,12 +1,12 @@
 import log4js from "log4js";
 const logger = log4js.getLogger('LeaderboardService');
 
-import { IConfig } from '../Config.js';
+import { IConfig } from '../Config';
 
-import { IDbProvider, TopData, UserProperties } from './db/DbProvider.types.js';
-import { ICacheProvider } from './cache/CacheProvider.types.js';
-import { DbProvidersIndex } from './db/index.js';
-import { CacheProvidersIndex } from './cache/index.js';
+import { IDbProvider, TopData, UserProperties } from './db/DbProvider.types';
+import { ICacheProvider } from './cache/CacheProvider.types';
+import { DbProvidersIndex } from './db/index';
+import { CacheProvidersIndex } from './cache/index';
 
 export class LeaderboardService {
 	private readonly config: IConfig;

@@ -1,4 +1,4 @@
-import {IDbProvider, TopData} from '../db/DbProvider.types.js';
+import {IDbProvider, TopData} from '../db/DbProvider.types';
 export {IDbProvider, TopData}
 
 export type CacheData = {

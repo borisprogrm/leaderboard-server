@@ -6,14 +6,14 @@ import express, { Express, Router, Request, Response, NextFunction } from 'expre
 
 import * as HttpTerminator from 'http-terminator';
 
-import { ControllersManager } from './ControllersManager.js';
+import { ControllersManager } from './ControllersManager';
 
 import * as OpenApiValidator from 'express-openapi-validator';
-import { HttpError } from 'express-openapi-validator/dist/framework/types.js';
+import { HttpError } from 'express-openapi-validator/dist/framework/types';
 
 import swaggerUi from 'swagger-ui-express';
 
-import { IAppContext, IConfig } from '../app.types.js';
+import { IAppContext, IConfig } from '../app.types';
 
 export class Server {
 	private app: Express;

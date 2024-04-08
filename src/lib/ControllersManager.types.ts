@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types.js';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 
-import { IAppContext } from '../app.types.js';
+import { IAppContext } from '../app.types';
 export { IAppContext };
 
 export type ControllerHandlerFunc = (request: Request, response: Response) => Promise<void>;

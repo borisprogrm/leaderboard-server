@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IController, ControllerMethod, OperationObject, IAppContext } from '../lib/ControllersManager.types.js';
+import { IController, ControllerMethod, OperationObject, IAppContext } from '../lib/ControllersManager.types';
 
 export class ControllerImpl implements IController {
 	constructor(

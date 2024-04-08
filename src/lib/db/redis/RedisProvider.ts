@@ -2,7 +2,7 @@ import log4js from "log4js";
 const logger = log4js.getLogger('RedisProvider');
 
 import { Redis, RedisOptions } from 'ioredis';
-import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types.js';
+import { IDbProvider, DBProviderConfig, TopData, UserProperties } from '../DbProvider.types';
 
 type UserHashProperties = {
 	nm?: string,

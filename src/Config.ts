@@ -1,4 +1,4 @@
-import * as ConfigTypes from './Config.types.js';
+import * as ConfigTypes from './Config.types';
 
 const apiSpecHdr = {
 	openapi: '3.0.1',

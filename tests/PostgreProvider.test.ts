@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer, Wait, StartedTestContainer } from 'testcontainers';
 
 import PostgreProvider from '../src/lib/db/postgresql/PostgreProvider';
 import { TopData, UserProperties } from '../src/lib/db/DbProvider.types';
@@ -35,6 +35,7 @@ describe('PostgreProvider', () => {
 			POSTGRES_PASSWORD: POSTGRES_PASSWORD,
 			POSTGRES_DB: POSTGRES_DB
 		})
+		.withWaitStrategy(Wait.forListeningPorts())
 		.start();
 
 		dbProvider = new PostgreProvider();
@@ -49,7 +50,7 @@ describe('PostgreProvider', () => {
 		
 		// Create db tables and indexes
 		await dbProvider['pool']!.query(fs.readFileSync('./src/lib/db/postgresql/dbSetup.sql', 'utf-8'));
-	}, 60000);
+	}, 100000);
 
 	afterAll(async () => {
 		await dbProvider.Shutdown();

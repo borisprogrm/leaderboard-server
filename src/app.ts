@@ -1,10 +1,10 @@
 import log4js from "log4js";
 const logger = log4js.getLogger('App');
 
-import { IAppContext } from './app.types.js';
-import { config } from './Config.js';
-import { Server } from './lib/Server.js';
-import { LeaderboardService } from './lib/LeaderboardService.js';
+import { IAppContext } from './app.types';
+import { config } from './Config';
+import { Server } from './lib/Server';
+import { LeaderboardService } from './lib/LeaderboardService';
 
 log4js.configure({
 	appenders: {

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer, Wait, StartedTestContainer } from 'testcontainers';
 
 import MongoProvider from '../src/lib/db/mongodb/MongoProvider';
 import { TopData, UserProperties } from '../src/lib/db/DbProvider.types';
@@ -27,9 +27,10 @@ describe('MongoProvider', () => {
 		mongoContainer = await new GenericContainer('mongo:7.0.4')
 			.withExposedPorts(27017)
 			.withCopyContentToContainer([{
-				content: fs.readFileSync('./src/lib/db/mongodb/setup.mongodb.cjs'),
+				content: fs.readFileSync('./src/lib/db/mongodb/setup.mongodb.js'),
 				target: '/docker-entrypoint-initdb.d/mongo-init.js',
 			}])
+			.withWaitStrategy(Wait.forListeningPorts())
 			.start();
 
 		dbProvider = new MongoProvider();
@@ -38,7 +39,7 @@ describe('MongoProvider', () => {
 			isDebug: true,
 			url: `mongodb://localhost:${mongoContainer.getMappedPort(27017)}`,
 		});
-	}, 60000)
+	}, 100000)
 
 	afterAll(async () => {
 		await dbProvider.Shutdown();
