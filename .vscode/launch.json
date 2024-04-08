@@ -7,7 +7,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "Node: debug app",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
@@ -17,6 +17,23 @@
 				"${workspaceFolder}/dist/**/*.js"
 			],
 			"outputCapture": "std", // or "console" 
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Nodemon: debug app (watch)",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": [
+				"run",
+				"dev:debug"
+			],
+			"autoAttachChildProcesses": true,
+			"restart": true,
+			"sourceMaps": true,
+			"stopOnEntry": false,
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "openOnSessionStart",
+			"cwd": "${workspaceRoot}",
 		},
 		{
 			"type": "node",
